@@ -1,4 +1,4 @@
-  <?php
+<?
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Beverage;
@@ -38,7 +38,7 @@ class Beverages extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nameOfBeverage' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'content' => 'required|string',
             'price' => 'required|numeric',
             'published' => 'nullable|boolean',
@@ -91,7 +91,7 @@ class Beverages extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'nameOfBeverage' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'content' => 'required|string',
             'price' => 'required|numeric',
             'published' => 'nullable|boolean',

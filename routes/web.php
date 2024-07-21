@@ -10,9 +10,8 @@ use App\Http\Controllers\Categories;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Beverages;
 use App\Models\Beverage;
-use Illuminate\Auth\Events\Login;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
 use App\Http\Controllers\MessagesController;
+
 
 
 Route::get('/', function () {
@@ -24,13 +23,16 @@ Route::get('/', function () {
 Route::get('/site', function () {
     return view('homeSite');
 });
-Route::get('mySiteContct', [ContactController::class, 'showContactForm'])->name('mySiteContct');
-Route::post('SiteContact', [ContactController::class, 'sendContact'])->name('SiteContact');
-Route::get('SiteCon', [Controller::class, 'contact'])->name('SiteCon');
+Route::get('/mysite2', function () {
+    return view('homeSite2');
+});
+// Route::get('mySiteContct', [ContactController::class, 'showContactForm'])->name('mySiteContct');
+// Route::post('SiteContact', [ContactController::class, 'sendContact'])->name('SiteContact');
+// Route::get('SiteContact', [Controller::class, 'contact'])->name('SiteContact');
 Route::get('special', [Controller::class, 'special'])->name('special');
 Route::get('about', [Controller::class, 'about'])->name('about');
 Route::get('drink', [Controller::class, 'drinkMenu'])->name('drink');
-Route::get('home', [Controller::class, 'home'])->name('home');
+//Route::get('home', [Controller::class, 'home'])->name('home');
 ###################################################################################
 Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('verified')->name('login');
 Route::post('loginAdmin', [LoginController::class, 'credentials'])->name('loginAdmin');
@@ -81,12 +83,9 @@ Route::delete('beverages/forceDelete/{id}', [Beverages::class, 'forceDelete'])->
 Route::get('messages', [MessagesController::class, 'index'])->name('messages.index');
 Route::delete('messages/{id}', [MessagesController::class, 'destroy'])->name('messages.destroy');
 Route::get('messages/{id}', [MessagesController::class, 'show'])->name('messages.show');
-//contact
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+//contact routes
+Route::get('/contact', [ContactController::class,'index'])->name('contact');
+Route::post('/contact/submit', [ContactController::class,'submit'])->name('contact.submit');
 
 Auth::routes(['verify' => true]);
 

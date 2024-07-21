@@ -22,10 +22,10 @@ class FrontPagesController extends Controller
         $title='Our Special Items';
         return view('specialItems',compact('title'));
     }
-    public function contact(){
-        $title='Contact with Us';
-        return view('contact',compact('title'));
-    }
+    // public function contact(){
+    //     $title='Contact with Us';
+    //     return view('includes.contact',compact('title'));
+    // }
 
 
     public function drinkMenu(){

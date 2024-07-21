@@ -2,13 +2,13 @@
 <nav class="tm-black-bg tm-drinks-nav">
               <ul>
                 <li>
-                  <a href="{{route('drink')}}" class="tm-tab-link {{request()->is('about') ? 'active' : ''}}" data-id="cold">Iced Coffee</a>
+                  <a href="#" class="tm-tab-link" data-id="cold">Iced Coffee</a>
                 </li>
                 <li>
-                  <a href="{{route('drink')}}" class="tm-tab-link {{request()->is('drink') ? 'active' : ''}}" data-id="hot">Hot Coffee</a>
+                  <a href="#" class="tm-tab-link" data-id="hot">Hot Coffee</a>
                 </li>
                 <li>
-                  <a href="{{route('drink')}}" class="tm-tab-link {{request()->is('drink') ? 'active' : ''}}" data-id="juice">Fruit Juice</a>
+                  <a href="#" class="tm-tab-link" data-id="juice">Fruit Juice</a>
                 </li>
               </ul>
             </nav>

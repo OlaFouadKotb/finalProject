@@ -36,7 +36,6 @@
   @include('includes.special')
   @include('includes.contact')
 
-     <!-- end Contact Page -->
      </main>
       </div>    
     </div>

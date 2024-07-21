@@ -11,7 +11,7 @@ class Message extends Model
 
     // The attributes that are mass assignable.
     protected $fillable = [
-        'full_name',
+        'name',
         'email',
         'message',
     ];

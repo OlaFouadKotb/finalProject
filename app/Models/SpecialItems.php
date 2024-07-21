@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class SpecialItems extends Model
 {
     use HasFactory;
-    protected $fillable = ['image','nameOfItem','describtion'];
+    protected $fillable = ['image','title','describtion'];
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     /*
@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/users';
 
     /**
      * Create a new controller instance.
@@ -37,4 +37,26 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+    public function showLoginForm(){
+        return view('auth.login');}
+ /**
+     * Validate the user's login credentials.
+     *
+     * @param Request $request
+     * @return array
+     */
+    
+        public function credentials(Request $request){
+            
+// Determine if the user input is an email address
+$loginField = filter_var($request->user_name, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+
+// Return the validated credentials
+return [
+    $loginField => $request->user_name,
+    'password' => $request->password,
+];
+        
+    }
 }
+

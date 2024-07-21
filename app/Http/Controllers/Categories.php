@@ -50,7 +50,8 @@ class Categories extends Controller
     public function show(string $id)
     {
         // Fetch the specified category
-        $category = Category::findOrFail($id);
+        $category = Category::with('beverages')->findOrFail($id);
+        //$category = Category::findOrFail($id);
         return view('admin.showCategory', compact('category'));
     }
 
@@ -107,16 +108,22 @@ class Categories extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
-    {
-        // Soft delete the category
-        $id = $request->id;
-        Category::where('id',$id)->delete();
-        
-        // Redirect with success message
-        return redirect('categories');
-    }
-
+   
+     public function destroy($id)
+     {
+         try {
+             $category = Category::findOrFail($id);
+             $category->delete();
+             return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+         } catch (\Exception $e) {
+             if ($e->getMessage() === 'Cannot delete category that contains beverages.') {
+                 return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+             }
+ 
+             // يمكنك التعامل مع استثناءات أخرى هنا إذا لزم الأمر
+             return redirect()->back()->withErrors(['error' => 'An error occurred while deleting the category.']);
+         }
+     }
     /**
      * Permanently delete the specified trashed category.
      */

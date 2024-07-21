@@ -42,9 +42,9 @@
                         <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="{{ route('insertbeverages') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="nameOfBeverage">Title <span class="required">*</span></label>
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="title">Title <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input type="text" id="nameOfBeverage" name="nameOfBeverage" value="{{ old('nameOfBeverage') }}" required="required" class="form-control">
+                                    <input type="text" id="title" name="title" value="{{ old('title') }}" required="required" class="form-control">
                                 </div>
                             </div>
                             <div class="item form-group">
@@ -78,13 +78,13 @@
                             <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="image">Image <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                @if(isset($client) && $client->image)
-                    <div>
-                        <p>Current Image:</p>
-                        <img src="{{ asset('assets/img/' . $client->image) }}">
-                    </div>
-                @endif
-                                    <input type="file" id="image" name="image" required="required" class="form-control">
+                                    @if(isset($beverage) && $beverage->image)
+                                        <div>
+                                            <p>Current Image:</p>
+                                            <img src="{{ asset('assets/img/' . $beverage->image) }}" alt="Current Image" style="width: 150px; height: auto;">
+                                        </div>
+                                    @endif
+                                    <input type="file" id="image" name="image" class="form-control">
                                 </div>
                             </div>
                             <div class="item form-group">

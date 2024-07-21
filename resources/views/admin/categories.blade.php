@@ -43,6 +43,16 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
+                                    @if ($errors->has('error'))
+                                    <div class="alert alert-danger"> 
+                                        {{ $errors->first('error') }}
+                                    </div>
+                                    @endif
+                                    @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                    @endif
                                     <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
@@ -55,16 +65,14 @@
                                             @foreach($categories as $category)
                                             <tr>
                                                 <td>{{ $category->name }}</td>
-                                                <td><a href="{{ route('editcategory', $category->id) }}"><img src="{{asset('assets/images/edit.png')}}" alt="Edit"></a></td>
-                                                <td>{{ $category->name }}</td>
+                                                <td><a href="{{ route('editcategory', $category->id) }}"><img src="{{ asset('assets/images/edit.png') }}" alt="Edit"></a></td>
                                                 <td>
-          <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" name="id" value="{{ $category->id }}">
-            <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this client?');">
-          </form>
-        </td>
+                                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">
+                                                    </form>
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>

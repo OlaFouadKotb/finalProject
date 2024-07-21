@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Message;
+use App\Mail\ContactMail;
 
 class ContactController extends Controller
 {
+    public function index(){
+        $title = 'Contact with Us';
+        return view('includes.contact', compact('title'));
+    }
+
     public function submit(Request $request)
     {
         // Validate the request
@@ -24,18 +30,11 @@ class ContactController extends Controller
         $message->save();
 
         // Send email to the owner
-        Mail::send([], [], function ($mail) use ($request) {
-            $mail->to('owner@example.com') // Replace with your email
-                ->subject('New Contact Message')
-                ->setBody(
-                    'Name: ' . $request->name . '<br>' .
-                    'Email: ' . $request->email . '<br>' .
-                    'Message: ' . nl2br(htmlspecialchars($request->message)), // Convert new lines to <br> and escape HTML
-                    'text/html'
-                );
-        });
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+        try {
+            Mail::to('engolakotb154@gmail.com')->send(new ContactMail($request->name, $request->email, $request->message));
+            return redirect()->back()->with('success', 'Your message has been sent successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to send your message. Please try again later.');
+        }
     }
 }

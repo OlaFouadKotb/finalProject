@@ -45,11 +45,9 @@
                                     <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Beverage Name</th>
-                                                <th>Price</th>
-                                                <th>Content</th>
-                                                <th>Image</th>
-                                                <th>Category</th>
+                                                <th>Beverage Date</th>
+                                                <th>Title</th>
+                                                <th>Published</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
@@ -57,22 +55,22 @@
                                         <tbody>
                                             @foreach ($beverages as $beverage)
                                             <tr>
-                                                <td>{{ $beverage->nameOfBeverage }}</td>
-                                                <td>{{ $beverage->price }}</td>
-                                                <td>{{ $beverage->description }}</td>
-                                                <td><img src="{{ asset('assets/img/' . $beverage->image) }}" alt="{{ $beverage->nameOfBeverage }}" width="50"></td>
-                                                <td>{{ $beverage->category }}</td>
+                                                <td>{{ $beverage->created_at->format('Y-m-d') }}</td>
+                                                <td>{{ $beverage->title }}</td>
+                                                  td>
+                                                    {{ $beverage->published ? 'Yes' : 'No' }}
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('editbeverage', $beverage->id) }}">
-                                                        <img src="{{ asset('images/edit.png') }}" alt="Edit">
+                                                        <img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit" style="width: 20px; height: 20px;">
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('beverages.destroy', $beverage->id) }}" method="POST">
+                                                    <form action="{{ route('beverages.destroy', $beverage->id) }}" method="POST" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" onclick="return confirm('Are you sure?')">
-                                                            <img src="{{ asset('images/delete.png') }}" alt="Delete">
+                                                        <button type="submit" class="btn btn-link p-0" onclick="return confirm('Are you sure?')">
+                                                            <img src="{{ asset('adminAssets/images/delete.png')}}" alt="Delete" style="width: 20px; height: 20px;">
                                                         </button>
                                                     </form>
                                                 </td>

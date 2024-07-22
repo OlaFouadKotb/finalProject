@@ -24,9 +24,8 @@ Route::get('special', [HomeController::class, 'special'])->name('special');
 Route::get('contact', [HomeController::class, 'contact'])->name('contact');
 
 ###################################################################################
-Route::middleware(['is_admin'])->group(function () {
 //Authenticated routes:
-
+Route::middleware(['is_admin'])->group(function () {
 Route::post('loginAdmin', [LoginController::class, 'credentials'])->name('loginAdmin');
 Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('verified')->name('login');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');

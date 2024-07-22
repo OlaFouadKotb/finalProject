@@ -22,7 +22,7 @@ class SpecialItemsController extends Controller
         $specialItems = SpecialItems::all();
         
         // Return view with the special items data
-        return view('includes.specialItems', compact('specialItems'));
+        return view('frontPages.special', compact('specialItems'));
     }
 
     /**
@@ -33,7 +33,7 @@ class SpecialItemsController extends Controller
     public function create()
     {
         // Return view for creating a new special item
-        return view('specialitems.create');
+        return view('admin.addBeverage');
     }
 
     /**
@@ -42,14 +42,14 @@ class SpecialItemsController extends Controller
      * @param  \App\Http\Requests\StoreSpecialItemRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSpecialItemRequest $request)
+    public function store(Request $request)
     {
         // Validate and store the new special item
         $validatedData = $request->validated();
         SpecialItems::create($validatedData);
 
         // Redirect to index with success message
-        return redirect()->route('specialitems.index')
+        return redirect()->route('special')
                          ->with('success', 'Special item created successfully.');
     }
 
@@ -59,10 +59,10 @@ class SpecialItemsController extends Controller
      * @param  \App\Models\SpecialItem  $specialItem
      * @return \Illuminate\Http\Response
      */
-    public function show(SpecialItem $specialItem)
+    public function show( $specialItem)
     {
         // Return view with the specific special item data
-        return view('specialitems.show', compact('specialItem'));
+        return view('frontPages.special', compact('specialItem'));
     }
 
     /**
@@ -71,10 +71,10 @@ class SpecialItemsController extends Controller
      * @param  \App\Models\SpecialItem  $specialItem
      * @return \Illuminate\Http\Response
      */
-    public function edit(SpecialItem $specialItem)
+    public function edit( $specialItem)
     {
         // Return view for editing the specific special item
-        return view('specialitems.edit', compact('specialItem'));
+        return view('admin.editBeverages', compact('specialItem'));
     }
 
     /**
@@ -84,30 +84,17 @@ class SpecialItemsController extends Controller
      * @param  \App\Models\SpecialItem  $specialItem
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSpecialItemRequest $request, SpecialItem $specialItem)
+    public function update(Request $request, $specialItem)
     {
         // Validate and update the special item
         $validatedData = $request->validated();
         $specialItem->update($validatedData);
 
         // Redirect to index with success message
-        return redirect()->route('specialitems.index')
+        return redirect()->route('special')
                          ->with('success', 'Special item updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SpecialItem  $specialItem
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SpecialItem $specialItem)
-    {
-        // Delete the special item
-        $specialItem->delete();
-
-        // Redirect to index with success message
-        return redirect()->route('specialitems.index')
-                         ->with('success', 'Special item deleted successfully.');
-    }
+   
+   
 }

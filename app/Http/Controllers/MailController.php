@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\DemoMail;
+use App\Mail\ContactMail;
 
 class MailController extends Controller
 {
@@ -20,7 +20,7 @@ class MailController extends Controller
             'body' => 'This is for testing email using smtp.'
         ];
            
-        Mail::to('engolakotb154@gmail.com')->queue(new DemoMail($mailData));
+        Mail::to('engolakotb154@gmail.com')->queue(new ContactMail($mailData));
              
         dd("Email is sent successfully.");
     }

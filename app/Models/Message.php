@@ -14,6 +14,7 @@ class Message extends Model
         'name',
         'email',
         'message',
+        'readable'
     ];
 
     // The attributes that should be hidden for arrays.

@@ -1,5 +1,6 @@
 <?
 namespace App\Http\Controllers;
+use App\Traits\Traits\UploadFile;
 use Illuminate\Http\Request;
 use App\Models\Beverage;
 use Illuminate\Support\Facades\Storage;
@@ -7,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Beverages extends Controller
 {
-   // use UploadFile;
+   use UploadFile;
     /**
      * Display a listing of beverages.
      *
@@ -15,8 +16,9 @@ class Beverages extends Controller
      */
     public function index()
     {
+        $title='Beverages of cafe';
         $beverages = Beverage::all();
-        return view('admin.beverages', compact('beverages'));
+        return view('admin.beverages', compact('beverages','title'));
     }
 
     /**
@@ -44,14 +46,13 @@ class Beverages extends Controller
             'published' => 'nullable|boolean',
             'special' => 'nullable|boolean',
             'image' => 'required',
-            'category' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
         ]);
-         $imgExt = $request->image->getClientOriginalExtension();
-         $fileName = time() . '.' . $imgExt;
-         $path = 'assets/img';
-         $request->image->move($path, $fileName);
-          $data['image'] = $fileName;
-       
+        $fileName= $this->upload($request->image, 'assets/img');
+         $data['image'] = $fileName;
+            // Handle the active checkbox
+       $data['active'] = isset ($request->active);
+       $data['published'] = isset ($request->published);
         Beverage::create($data);
 
         return redirect()->route('beverages')->with('success', 'Beverage created successfully.');
@@ -65,8 +66,10 @@ class Beverages extends Controller
      */
     public function show(string $id)
     {
+        $title = "Show beverage ";
+        
         $beverage = Beverage::findOrFail($id);
-        return view('admin.showBeverage', compact('beverage'));
+        return view('admin.showBeverage', compact('beverage','title'));
     }
 
     /**
@@ -77,8 +80,9 @@ class Beverages extends Controller
      */
     public function edit($id)
     {
+        $title='edit beverages';
         $beverage = Beverage::findOrFail($id);
-        return view('admin.editBeverages', compact('beverage'));
+        return view('admin.editBeverages', compact('beverage','title'));
     }
 
     /**
@@ -90,6 +94,8 @@ class Beverages extends Controller
      */
     public function update(Request $request, $id)
     {
+        $beverage = Beverage::findOrFail($id);
+    
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -97,21 +103,29 @@ class Beverages extends Controller
             'published' => 'nullable|boolean',
             'special' => 'nullable|boolean',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|string'
+            'category_id' => 'required|exists:categories,id',
         ]);
-        $beverage = Beverage::findOrFail($id);
-
+    
+        // Handle image upload
         if ($request->hasFile('image')) {
+            // Delete the old image if it exists
             if ($beverage->image) {
-                Storage::disk('public')->delete($beverage->image);
+                $oldImagePath = public_path('assets/img/' . $beverage->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
             }
-
-            $path = $request->file('image')->store('images', 'public');
-            $data['image'] = $path;
+    
+            // Store the new image
+            $fileName = $this->upload($request->image, 'assets/img');
+            $data['image'] = $fileName;
+        } else {
+            // Keep the old image if no new image is uploaded
+            $data['image'] = $beverage->image;
         }
-
+    
         $beverage->update($data);
-
+    
         return redirect()->route('beverages')->with('success', 'Beverage updated successfully.');
     }
 
@@ -124,13 +138,15 @@ class Beverages extends Controller
     public function destroy($id)
     {
         $beverage = Beverage::findOrFail($id);
-        if (Storage::exists('assets/img/' . $beverage->image)) {
-            Storage::delete('assets/img/' . $beverage->image);
+        if ($beverage->image) {
+            $imagePath = public_path('assets/img/' . $beverage->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
         $beverage->delete();
-        return redirect()->route('beverages')->with('success', 'Beverage deleted successfully');
+        return redirect()->route('beverages')->with('success', 'Beverage deleted successfully.');
     }
-
     /**
      * Display a listing of trashed beverages.
      *

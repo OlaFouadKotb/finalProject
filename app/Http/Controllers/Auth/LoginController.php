@@ -5,20 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
+       use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -38,25 +29,30 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
     public function showLoginForm(){
-        return view('auth.login');}
+        return view('auth.login')
+        ;}
  /**
      * Validate the user's login credentials.
      *
      * @param Request $request
      * @return array
      */
-    
-        public function credentials(Request $request){
-            
-// Determine if the user input is an email address
-$loginField = filter_var($request->user_name, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+  
+     public function credentials(Request $request) {
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            return ['email' => $request->email, 'password' => $request->password];
+        } else {
+            return ['userName' => $request->email, 'password' => $request->password];
+        }
+    }
 
-// Return the validated credentials
-return [
-    $loginField => $request->user_name,
-    'password' => $request->password,
-];
-        
+
+    public function authenticated(Request $request, $user)
+    {
+        // Set session variables
+        Session::put('userName', $user->userName);
+        Session::put('name', $user->name);
+
     }
 }
 

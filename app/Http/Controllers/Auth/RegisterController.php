@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
 {
@@ -59,5 +60,13 @@ class RegisterController extends Controller
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }
+
+    
+    protected function authenticated(Request $request, $user)
+    {
+        // Set session variables
+        Session::put('userName', $user->userName);
+        Session::put('name', $user->name);
+}
 }
 

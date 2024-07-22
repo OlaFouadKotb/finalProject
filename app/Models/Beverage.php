@@ -18,9 +18,10 @@ class Beverage extends Model
         'published',
         'special',
         'image',
-        'category'
+        'category_id'
     ];
-
+    protected $dates = ['deleted_at'];
+    
     public function category()
     {
         return $this->belongsTo(Category::class);

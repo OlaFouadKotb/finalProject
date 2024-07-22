@@ -10,7 +10,7 @@
                 <li class="nav-item dropdown open">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
                         <img src="{{asset('adminAssets/images/img.jpg')}}" alt="">
-                        {{ Auth::user()->name }} <!-- Display the logged-in user's name -->
+                      
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="javascript:;"> Profile</a>

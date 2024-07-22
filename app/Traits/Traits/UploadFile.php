@@ -1,5 +1,4 @@
-<?php
-
+<?
 namespace App\Traits\Traits;
 
 use PhpParser\Builder\Function_;

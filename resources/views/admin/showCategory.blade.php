@@ -16,19 +16,10 @@
             <div class="col-md-12 col-sm-12">
                 <div class="x_panel">
                     <div class="x_title">
-                    <h1>{{ $category->name }}</h1>
-                    <ul> @foreach($category->beverages as $beverage)
-                        <li>{{ $beverage->name }} - ${{ $beverage->price }}</li>
-                        @endforeach
-                    </ul>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                        </ul>
+                        <h1>{{ $category->name }}</h1>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <br />
                         <div class="form-horizontal form-label-left">
                             <div class="form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="category-name">Category Name:</label>
@@ -36,13 +27,30 @@
                                     <input type="text" id="category-name" class="form-control" value="{{ $category->name }}" disabled>
                                 </div>
                             </div>
-                            <!-- You can add more fields here as needed -->
+
+                            <!-- List of beverages -->
+                            <div class="form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align">Beverages:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    @if($category->beverages->isEmpty())
+                                        <p>No beverages available for this category.</p>
+                                    @else
+                                        <ul class="list-group">
+                                            @foreach($category->beverages as $beverage)
+                                                <li class="list-group-item">
+                                                    {{ $beverage->name }} - ${{ $beverage->price }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+                            </div>
 
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 offset-md-3">
-                                    <a href="{{ route('categories.index') }}" class="btn btn-primary">Back</a>
-                                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">Edit</a>
+                                    <a href="{{ route('categories') }}" class="btn btn-primary">Back</a>
+                                    <a href="{{ route('editcategory', $category->id) }}" class="btn btn-warning">Edit</a>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,3 @@
-<!-- resources/views/admin/beverages/edit.blade.php -->
 @extends('layouts.adminMain')
 
 @section('content')
@@ -21,11 +20,16 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-    <label for="category_id">Category</label>
-    <select name="category_id" class="form-control">
-        
-    </select>
-</div>
+                            <label for="category_id">Category</label>
+                            <select name="category_id" class="form-control">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" 
+                                        {{ $beverage->category_id == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="date">Date</label>
                             <input type="date" name="date" class="form-control" value="{{ $beverage->date }}">
@@ -35,11 +39,20 @@
                             <input type="text" name="title" class="form-control" value="{{ $beverage->title }}">
                         </div>
                         <div class="form-group">
-                            <label for="published">Published</label>
-                            <select name="published" class="form-control">
-                                <option value="1" {{ $beverage->published ? 'selected' : '' }}>Yes</option>
-                                <option value="0" {{ !$beverage->published ? 'selected' : '' }}>No</option>
-                            </select>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="published" name="published" 
+                                        {{ old('published', $beverage->published) ? 'checked' : '' }}> Published
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="special" name="special" 
+                                        {{ old('special', $beverage->special) ? 'checked' : '' }}> Special
+                                </label>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Update Beverage</button>
                     </form>

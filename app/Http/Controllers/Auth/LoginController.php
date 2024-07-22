@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-       use AuthenticatesUsers;
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -28,17 +28,20 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-    public function showLoginForm(){
-        return view('auth.login')
-        ;}
- /**
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    /**
      * Validate the user's login credentials.
      *
      * @param Request $request
      * @return array
      */
-  
-     public function credentials(Request $request) {
+    public function credentials(Request $request)
+    {
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             return ['email' => $request->email, 'password' => $request->password];
         } else {
@@ -46,13 +49,22 @@ class LoginController extends Controller
         }
     }
 
-
-    public function authenticated(Request $request, $user)
+    /**
+     * Handle the post-authentication actions.
+     *
+     * @param Request $request
+     * @param $user
+     * @return \Illuminate\Http\Response
+     */
+    protected function authenticated(Request $request, $user)
     {
-        // Set session variables
-        Session::put('userName', $user->userName);
-        Session::put('name', $user->name);
+        // Store user profile information in session
+        session([
+            'profile_image' => $user->profile_image,
+            'user_name' => $user->user_name,
+        ]);
 
+        // Redirect or other post-authentication logic
+        return redirect()->intended($this->redirectPath());
     }
 }
-

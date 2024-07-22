@@ -23,14 +23,31 @@
         <div class="clearfix"></div>
 
         <div class="row">
-            <div class="col-md-12 col-sm-12 ">
+            <div class="col-md-12 col-sm-12">
                 <div class="x_panel">
-                    <h2>Full Name: {{ $message->full_name }}</h2>
-                    <br>
-                    <h2>Email: {{ $message->email }}</h2>
-                    <br>
-                    <h2>Message Content:</h2>
-                    <p>{{ $message->message }}</p>
+                    <div class="x_title">
+                        <h2>Message Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="form-group">
+                            <label class="col-form-label"><strong>Full Name:</strong></label>
+                            <p>{{ $message->full_name }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label"><strong>Email:</strong></label>
+                            <p>{{ $message->email }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label"><strong>Message Content:</strong></label>
+                            <p>{{ $message->message }}</p>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <a href="{{ route('messages.index') }}" class="btn btn-primary">Back to List</a>
+                            <!-- Add more buttons if needed, e.g., Delete or Mark as Read -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

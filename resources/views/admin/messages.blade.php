@@ -1,4 +1,5 @@
 @extends('layouts.adminMain')
+
 @section('content')
 <!-- page content -->
 <div class="right_col" role="main">
@@ -60,13 +61,13 @@
                         <tr>
                           <td>{{ $message->full_name }}</td>
                           <td>{{ $message->email }}</td>
-                          <td><a href="{{ route('messages.show', $message->id) }}"><img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit"></a></td>
+                          <td><a href="{{ route('messages.show', $message->id) }}"><img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit" title="Edit"></a></td>
                           <td>
-                            <form action="{{ route('messages.destroy', $message->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('messages.destroy', $message->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this message?');">
                               @csrf
                               @method('DELETE')
                               <button type="submit" style="border:none; background:none;">
-                                <img src="{{ asset('adminAssets/images/delete.png') }}" alt="Delete">
+                                <img src="{{ asset('adminAssets/images/delete.png') }}" alt="Delete" title="Delete">
                               </button>
                             </form>
                           </td>
@@ -84,5 +85,4 @@
   </div>
 </div>
 <!-- /page content -->
-
 @endsection

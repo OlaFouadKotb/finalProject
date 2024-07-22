@@ -28,8 +28,7 @@
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Active</th>
-                                    <th>Action1</th>
-                                
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,7 +44,7 @@
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

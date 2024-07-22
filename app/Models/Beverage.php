@@ -21,6 +21,10 @@ class Beverage extends Model
         'category_id'
     ];
     protected $dates = ['deleted_at'];
+    protected $casts = [
+        'published' => 'boolean',
+        'special' => 'boolean',
+    ];
     
     public function category()
     {

@@ -61,7 +61,7 @@
                                                     {{ $beverage->published ? 'Yes' : 'No' }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('editbeverage', $beverage->id) }}">
+                                                    <a href="{{ route('beverages.edit', $beverage->id) }}">
                                                         <img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit" style="width: 20px; height: 20px;">
                                                     </a>
                                                 </td>

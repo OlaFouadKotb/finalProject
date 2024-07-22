@@ -1,3 +1,4 @@
+<!-- resources/views/admin/beverages/create.blade.php -->
 @extends('layouts.adminMain')
 
 @section('content')
@@ -39,24 +40,38 @@
                     </div>
                     <div class="x_content">
                         <br />
-                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="{{ route('insertbeverages') }}" method="POST" enctype="multipart/form-data">
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="{{ route('beverages.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="title">Title <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input type="text" id="title" name="title" value="{{ old('title') }}" required="required" class="form-control">
+                                    @error('title')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="content">Content <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <textarea id="content" name="content" required="required" class="form-control">{{ old('content') }}</textarea>
+                                    @error('content')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="item form-group">
                                 <label for="price" class="col-form-label col-md-3 col-sm-3 label-align">Price <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input id="price" class="form-control" type="number" name="price" value="{{ old('price') }}" required="required">
+                                    <input id="price" class="form-control" type="number" step="0.01" name="price" value="{{ old('price') }}" required="required">
+                                    @error('price')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="item form-group">
@@ -76,7 +91,7 @@
                                 </div>
                             </div>
                             <div class="item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="image">Image <span class="required">*</span></label>
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="image">Image</label>
                                 <div class="col-md-6 col-sm-6">
                                     @if(isset($beverage) && $beverage->image)
                                         <div>
@@ -85,6 +100,9 @@
                                         </div>
                                     @endif
                                     <input type="file" id="image" name="image" class="form-control">
+                                    @error('image')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="item form-group">
@@ -96,6 +114,9 @@
                                         <option value="Cold Coffee" {{ old('category') == 'Cold Coffee' ? 'selected' : '' }}>Cold Coffee</option>
                                         <option value="Fruit Juice" {{ old('category') == 'Fruit Juice' ? 'selected' : '' }}>Fruit Juice</option>
                                     </select>
+                                    @error('category')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
@@ -103,6 +124,7 @@
                                 <div class="col-md-6 col-sm-6 offset-md-3">
                                     <button class="btn btn-primary" type="button">Cancel</button>
                                     <button type="submit" class="btn btn-success">Add</button>
+
                                 </div>
                             </div>
                         </form>

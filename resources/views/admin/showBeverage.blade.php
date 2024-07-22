@@ -1,4 +1,3 @@
-
 @extends('layouts.adminMain')
 
 @section('content')
@@ -19,7 +18,7 @@
                 <div class="x_content">
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <p>{{ $beverage->date }}</p>
+                        <p>{{ \Carbon\Carbon::parse($beverage->date)->format('F j, Y') }}</p>
                     </div>
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -29,11 +28,11 @@
                         <label for="published">Published</label>
                         <p>{{ $beverage->published ? 'Yes' : 'No' }}</p>
                     </div>
-                    <a href="{{ route('editBeverages', $beverage->id) }}" class="btn btn-primary">Edit Beverage</a>
-                    <form action="{{ route('trashBeverage', $beverage->id) }}" method="POST" style="display:inline-block;">
+                    <a href="{{ route('beverages.edit', $beverage->id) }}" class="btn btn-primary">Edit Beverage</a>
+                    <form action="{{ route('beverages.trash', $beverage->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this beverage?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete Beverage</button>
+                        <button type="submit" class="btn btn-danger">Delete Beverage</button>
                     </form>
                     <a href="{{ route('beverages') }}" class="btn btn-secondary">Back to List</a>
                 </div>

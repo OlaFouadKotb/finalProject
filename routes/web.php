@@ -15,24 +15,20 @@ use App\Http\Controllers\HomeController;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 
 //Front Pages routes using A Controller :
+Route::get('mySite', [HomeController::class, 'index'])->name('mySite');
+Route::get('drinks', [HomeController::class, 'drink'])->name('drinks');
+Route::get('about', [HomeController::class, 'about'])->name('about');
+Route::get('special', [HomeController::class, 'special'])->name('special');
+Route::get('contact', [HomeController::class, 'contact'])->name('contact');
 
- Route::get('mySite', [HomeController::class, 'index'])->name('mySite');
-// Route::get('mySiteContct', [ContactController::class, 'showContactForm'])->name('mySiteContct');
-// Route::post('SiteContact', [ContactController::class, 'sendContact'])->name('SiteContact');
-// Route::get('SiteContact', [Controller::class, 'contact'])->name('SiteContact');
-Route::get('special', [Controller::class, 'special'])->name('special');
-Route::get('about', [Controller::class, 'about'])->name('about');
-Route::get('drink', [Controller::class, 'drinkMenu'])->name('drink');
-//Route::get('home', [Controller::class, 'home'])->name('home');
 ###################################################################################
-Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('verified')->name('login');
+Route::middleware(['is_admin'])->group(function () {
+//Authenticated routes:
+
 Route::post('loginAdmin', [LoginController::class, 'credentials'])->name('loginAdmin');
+Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('verified')->name('login');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('insertAdmin', [RegisterController::class, 'register'])->name('insertAdmin');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -51,16 +47,19 @@ Route::get('profile', [ProfileController::class, 'showProfile'])->name('Admin');
     Route::delete('categories/{id}/forceDelete', [Categories::class, 'forceDelete'])->name('categories.forceDelete');
 
 // Beverages Routes
-Route::get('beverages', [Beverages::class, 'index'])->name('beverages');
-Route::get('addbeverages', [Beverages::class, 'create'])->name('addbeverages');
-Route::post('insertbeverages', [Beverages::class, 'store'])->name('insertbeverages');
-Route::get('showbeverage/{id}', [Beverages::class, 'show'])->name('showbeverage');
-Route::get('editbeverages/{id}', [Beverages::class, 'edit'])->name('editbeverage');
-Route::put('beverages/{id}', [Beverages::class, 'update'])->name('updatebeverage');
-Route::get('beverages/trash', [Beverages::class, 'trash'])->name('beverages.trash');
-Route::patch('beverages/restore/{id}', [Beverages::class, 'restore'])->name('restorebeverages');
-Route::delete('beverages/{id}', [Beverages::class, 'destroy'])->name('beverages.destroy');
-Route::delete('beverages/forceDelete/{id}', [Beverages::class, 'forceDelete'])->name('beverages.forceDelete');
+
+
+Route::get('/beverages', [Beverages::class, 'index'])->name('beverages');
+Route::get('/beverages/create', [Beverage::class, 'create'])->name('beverages.create');
+Route::post('/beverages1', [Beverages::class, 'store'])->name('beverages.store');
+Route::get('/beverages/{id}', [Beverages::class, 'show'])->name('beverages.show');
+Route::get('/beverages/{id}/edit', [Beverages::class, 'edit'])->name('beverages.edit');
+Route::put('/beverages/{id}', [Beverages::class, 'update'])->name('beverages.update');
+Route::delete('/beverages/{id}', [Beverages::class, 'destroy'])->name('beverages.destroy');
+Route::get('/beverages/trash', [Beverages::class, 'trash'])->name('beverages.trash');
+Route::post('/beverages/{id}/restore', [Beverages::class, 'restore'])->name('beverages.restore');
+Route::delete('/beverages/{id}/force-delete', [Beverages::class, 'forceDelete'])->name('beverages.forceDelete');
+
  // Users Routes
  Route::get('users', [UserController::class, 'index'])->name('users');
  Route::get('addUsers', [UserController::class, 'create'])->name('addUsers');
@@ -76,15 +75,16 @@ Route::delete('beverages/forceDelete/{id}', [Beverages::class, 'forceDelete'])->
 
 
 //messages routes
-//Route::resource('messages', MessagesController::class);
+#####################
 Route::get('messages', [MessagesController::class, 'index'])->name('messages.index');
 Route::delete('messages/{id}', [MessagesController::class, 'destroy'])->name('messages.destroy');
 Route::get('message/{id}', [MessagesController::class, 'show'])->name('messages.show');
 //contact routes
-Route::get('/contact', [ContactController::class,'index'])->name('contact');
+############################
+Route::get('/contact1', [ContactController::class,'index'])->name('contact1');
 Route::post('/contact/submit', [ContactController::class,'store'])->name('contact.submit');
 Route::post('/send-mail', [ContactController::class, 'sendMail']);
 Route::get('/contactShow/{id}', [ContactController::class,'show'])->name('contactShow');
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
+});

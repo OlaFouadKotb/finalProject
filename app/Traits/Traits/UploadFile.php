@@ -1,15 +1,14 @@
 <?
 namespace App\Traits\Traits;
 
-use PhpParser\Builder\Function_;
+use Illuminate\Support\Facades\Storage;
 
 trait UploadFile
 {
-    public Function upload($imageFile, $path)
+    public function upload($file, $path)
     {
-        $imgExt = $imageFile->getClientOriginalExtension();
-        $fileName = time() .'.'.$imgExt;
-        $imageFile->move($path, $fileName);
+        $fileName = time() . '-' . $file->getClientOriginalName();
+        $file->storeAs($path, $fileName, 'public');
         return $fileName;
     }
 }

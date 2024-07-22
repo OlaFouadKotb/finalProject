@@ -4,7 +4,7 @@ use App\Traits\Traits\UploadFile;
 use Illuminate\Http\Request;
 use App\Models\Beverage;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Category;
 
 class Beverages extends Controller
 {
@@ -18,7 +18,8 @@ class Beverages extends Controller
     {
         $title='Beverages of cafe';
         $beverages = Beverage::all();
-        return view('admin.beverages', compact('beverages','title'));
+        //$beverages = Beverage::where('category', $category)->get();
+        return view('includes.drinkMenu', compact('beverages','title'));
     }
 
     /**
@@ -31,33 +32,30 @@ class Beverages extends Controller
         return view('admin.addBeverage');
     }
 
-    /**
-     * Store a newly created beverage in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'price' => 'required|numeric',
-            'published' => 'nullable|boolean',
-            'special' => 'nullable|boolean',
-            'image' => 'required',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-        $fileName= $this->upload($request->image, 'assets/img');
-         $data['image'] = $fileName;
-            // Handle the active checkbox
-       $data['active'] = isset ($request->active);
-       $data['published'] = isset ($request->published);
-        Beverage::create($data);
+{
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'price' => 'required|numeric',
+        'published' => 'nullable|boolean',
+        'special' => 'nullable|boolean',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'required|exists:categories,id',
+    ]);
 
-        return redirect()->route('beverages')->with('success', 'Beverage created successfully.');
-    }
+    // Handle image upload
+    $fileName = $this->upload($request->image, 'assets/img');
+    $data['image'] = $fileName;
 
+    // Convert boolean to integer for database
+    $data['published'] = isset($request->published) ? 1 : 0;
+    $data['special'] = isset($request->special) ? 1 : 0;
+
+    Beverage::create($data);
+
+    return redirect()->route('beverages')->with('success', 'Beverage created successfully.');
+}
     /**
      * Display the specified beverage.
      *
@@ -78,12 +76,13 @@ class Beverages extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $title='edit beverages';
-        $beverage = Beverage::findOrFail($id);
-        return view('admin.editBeverages', compact('beverage','title'));
-    }
+    
+        public function edit($id)
+        {
+            $beverage = Beverage::findOrFail($id);
+            $categories = Category::all(); // الحصول على جميع الفئات
+            return view('admin.beverages.edit', compact('beverage', 'categories'));
+        }
 
     /**
      * Update the specified beverage in storage.
@@ -94,8 +93,6 @@ class Beverages extends Controller
      */
     public function update(Request $request, $id)
     {
-        $beverage = Beverage::findOrFail($id);
-    
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -105,27 +102,20 @@ class Beverages extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ]);
-    
-        // Handle image upload
+        
+        $beverage = Beverage::findOrFail($id);
+
         if ($request->hasFile('image')) {
-            // Delete the old image if it exists
             if ($beverage->image) {
-                $oldImagePath = public_path('assets/img/' . $beverage->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+                Storage::disk('public')->delete($beverage->image);
             }
-    
-            // Store the new image
-            $fileName = $this->upload($request->image, 'assets/img');
-            $data['image'] = $fileName;
-        } else {
-            // Keep the old image if no new image is uploaded
-            $data['image'] = $beverage->image;
+
+            $path = $request->file('image')->store('images', 'public');
+            $data['image'] = $path;
         }
-    
+
         $beverage->update($data);
-    
+
         return redirect()->route('beverages')->with('success', 'Beverage updated successfully.');
     }
 
@@ -138,15 +128,13 @@ class Beverages extends Controller
     public function destroy($id)
     {
         $beverage = Beverage::findOrFail($id);
-        if ($beverage->image) {
-            $imagePath = public_path('assets/img/' . $beverage->image);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
+        if (Storage::exists('assets/img/' . $beverage->image)) {
+            Storage::delete('assets/img/' . $beverage->image);
         }
         $beverage->delete();
-        return redirect()->route('beverages')->with('success', 'Beverage deleted successfully.');
+        return redirect()->route('beverages')->with('success', 'Beverage deleted successfully');
     }
+
     /**
      * Display a listing of trashed beverages.
      *

@@ -16,13 +16,13 @@
             </li> 
             <li><a><i class="fa fa-desktop"></i> Beverages <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="{{ route('addbeverages') }}">Add Beverage</a></li>
+                    <li><a href="{{ route('beverages.create') }}">Add Beverage</a></li>
                     <li><a href="{{ route('beverages') }}">Beverages List</a></li>
                 </ul>
             </li>
             <li><a><i class="fa fa-envelope"></i> Messages <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="#">Messages List</a></li>
+                    <li><a href="{{route('messages.index')}}">Messages List</a></li>
                 </ul>
             </li>
         </ul>

@@ -17,12 +17,16 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->is('login') || $request->is('register')) {
+            return $next($request);
+        }
+    
         // Check if the authenticated user is an admin
         if (Auth::check() && Auth::user()->is_admin) {
             return $next($request);
         }
-
+    
         // Redirect or deny access
-        return redirect('/mySite')->with('error', 'You do not have admin access.');
-    }
+        return redirect('/login')->with('error', 'You do not have admin access.');
+}
 }

@@ -20,11 +20,11 @@
             </li>
         </ul>
     </nav>
-
+    @foreach($beverages as $beverage)
     <div class="tm-list">
-        @foreach($beverages as $beverage)
+   
             <div class="tm-list-item">          
-                <img src="{{ asset('assets/img/. $beverage->image') }}" alt="Image" class="tm-list-item-img">
+                <img src="{{ asset('assets/img/.$beverage->image') }}" alt="Image" class="tm-list-item-img">
                 <div class="tm-black-bg tm-list-item-text">
                     <h3 class="tm-list-item-name">{{ $beverage->title }}<span class="tm-list-item-price">${{ $beverage->price }}</span></h3>
                     <p class="tm-list-item-description">{{ $beverage->content }}</p>

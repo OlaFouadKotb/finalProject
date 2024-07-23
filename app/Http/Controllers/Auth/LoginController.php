@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -48,23 +49,25 @@ class LoginController extends Controller
             return ['userName' => $request->email, 'password' => $request->password];
         }
     }
-
-    /**
-     * Handle the post-authentication actions.
-     *
-     * @param Request $request
-     * @param $user
-     * @return \Illuminate\Http\Response
-     */
     protected function authenticated(Request $request, $user)
     {
         // Store user profile information in session
         session([
             'profile_image' => $user->profile_image,
-            'user_name' => $user->user_name,
+            'user_name' => $user->name, // تأكد من استخدام الاسم الصحيح هنا
         ]);
-
-        // Redirect or other post-authentication logic
-        return redirect()->intended($this->redirectPath());
     }
-}
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+  
+    }
+

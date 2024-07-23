@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -10,6 +9,10 @@ use App\Http\Controllers\Categories;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Beverages;
 use App\Models\Beverage;
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Message;
+use App\Mail\ContactMail;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\HomeController;
 
@@ -24,14 +27,17 @@ Route::get('special', [HomeController::class, 'special'])->name('special');
 Route::get('contact', [HomeController::class, 'contact'])->name('contact');
 
 ###################################################################################
-//Authenticated routes:
-Route::middleware(['is_admin'])->group(function () {
+
+
+    Route::get('/', function () {
+            return view('welcome');
+         });
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('loginAdmin', [LoginController::class, 'credentials'])->name('loginAdmin');
-Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('verified')->name('login');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('insertAdmin', [RegisterController::class, 'register'])->name('insertAdmin');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('profile', [ProfileController::class, 'showProfile'])->name('Admin');
+Route::get('profile', [ProfileController::class, 'showProfile'])->name('profile');
 
     // Categories Routes
     Route::get('categories', [Categories::class, 'index'])->name('categories');
@@ -66,7 +72,6 @@ Route::delete('/beverages/{id}/force-delete', [Beverages::class, 'forceDelete'])
  Route::get('showUser/{id}', [UserController::class, 'show'])->name('showUser');
  Route::get('editUsers/{id}', [UserController::class, 'edit'])->name('editUser');
  Route::put('users/{id}', [UserController::class, 'update'])->name('updateUser');
- //Route::delete('users/{id}', [UserController::class, 'destroy'])->name('destroyUser');
  Route::get('users/trash', [UserController::class, 'trash'])->name('users.trash');
  Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
  Route::put('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
@@ -86,4 +91,3 @@ Route::post('/send-mail', [ContactController::class, 'sendMail']);
 Route::get('/contactShow/{id}', [ContactController::class,'show'])->name('contactShow');
 Auth::routes(['verify' => true]);
 
-});

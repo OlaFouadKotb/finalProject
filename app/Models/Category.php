@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory,SoftDeletes; 
 
     // Define the table if it's not following Laravel's naming convention
-    // protected $table = 'categories';
+    protected $table = 'categories';
 
     // Specify the fillable attributes
     protected $fillable = ['name'];

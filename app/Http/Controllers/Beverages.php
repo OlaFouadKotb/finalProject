@@ -18,8 +18,19 @@ class Beverages extends Controller
     {
         $title='Beverages of cafe';
         $beverages = Beverage::all();
-        //$beverages = Beverage::where('category', $category)->get();
-        return view('includes.drinkMenu', compact('beverages','title'));
+       
+        return view('admin.beverages', compact('beverages','title'));
+    }
+    public function index2()
+    {
+        $beverages = Beverage::all();
+       
+        return view('includes.drinkMenu', compact('beverages'));
+    }
+    public function showCategory($category)
+    {
+        $beverages = Beverage::where('category', $category)->get();
+        return view('drinkMenu', compact('beverages'));
     }
 
     /**

@@ -87,9 +87,9 @@ Route::delete('messages/{id}', [MessagesController::class, 'destroy'])->name('me
 Route::get('message/{id}', [MessagesController::class, 'show'])->name('messages.show');
 //contact routes
 ############################
-Route::get('/contact1', [ContactController::class,'index'])->name('contact1');
+Route::get('contact', [ContactController::class, 'showForm'])->name('contact.form');
 Route::post('/contact/submit', [ContactController::class,'store'])->name('contact.submit');
-Route::post('/send-mail', [ContactController::class, 'sendMail']);
+Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
 Route::get('/contactShow/{id}', [ContactController::class,'show'])->name('contactShow');
 Auth::routes(['verify' => true]);
 

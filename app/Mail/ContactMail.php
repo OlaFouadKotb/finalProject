@@ -1,53 +1,31 @@
-<?php
+<?
+namespace App\Http\Controllers;
 
-namespace App\Mail;
+use Illuminate\Http\Request;
+use App\Mail\ContactFormMail;
+use Illuminate\Support\Facades\Mail;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Queue\SerializesModels;
-
-class ContactMail extends Mailable
+class ContactController extends Controller
 {
-    use Queueable, SerializesModels;
-    public $data;
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($data)
+    public function showForm()
     {
-        $this->data = $data;
+        return view('frontPages.contact');
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function send(Request $request)
     {
-        return new Envelope(
-            subject: 'Contact Mail',
-        );
-    }
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string',
+        ]);
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'mails.wave_mail',
-        );
-    }
+        $contactData = $request->only('name', 'email', 'message');
+        
+        // Send the email
+        Mail::to('your_email@example.com')->send(new ContactFormMail($contactData));
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        // Redirect with success message
+        return redirect()->route('contact.form')->with('success', 'Your message has been sent!');
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Beverages;
+use App\Http\Controllers\DrinkController;
 use App\Models\Beverage;
 use App\Models\Category;
 use App\Models\User;
@@ -15,6 +16,7 @@ use App\Models\Message;
 use App\Mail\ContactMail;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\HomeController;
+
 
 
 
@@ -54,16 +56,16 @@ Route::get('profile', [ProfileController::class, 'showProfile'])->name('profile'
 // Beverages Routes
 
 
-Route::get('/beverages', [Beverages::class, 'index'])->name('beverages');
-Route::get('/beverages/create', [Beverage::class, 'create'])->name('beverages.create');
-Route::post('/beverages1', [Beverages::class, 'store'])->name('beverages.store');
-Route::get('/beverages/{id}', [Beverages::class, 'show'])->name('beverages.show');
-Route::get('/beverages/{id}/edit', [Beverages::class, 'edit'])->name('beverages.edit');
-Route::put('/beverages/{id}', [Beverages::class, 'update'])->name('beverages.update');
-Route::delete('/beverages/{id}', [Beverages::class, 'destroy'])->name('beverages.destroy');
-Route::get('/beverages/trash', [Beverages::class, 'trash'])->name('beverages.trash');
-Route::post('/beverages/{id}/restore', [Beverages::class, 'restore'])->name('beverages.restore');
-Route::delete('/beverages/{id}/force-delete', [Beverages::class, 'forceDelete'])->name('beverages.forceDelete');
+Route::get('/beverages', [DrinkController::class, 'index'])->name('beverages');
+Route::get('/beverages/create', [DrinkController::class, 'create'])->name('beverages.create');
+Route::post('/beverages1', [DrinkController::class, 'store'])->name('beverages.store');
+Route::get('/beverages/{id}', [DrinkController::class, 'show'])->name('beverages.show');
+Route::get('/beverages/{id}/edit', [DrinkController::class, 'edit'])->name('beverages.edit');
+Route::put('/beverages/{id}', [DrinkController::class, 'update'])->name('beverages.update');
+Route::delete('/beverages/{id}', [DrinkController::class, 'destroy'])->name('beverages.destroy');
+Route::get('/beverages/trash', [DrinkController::class, 'trash'])->name('beverages.trash');
+Route::post('/beverages/{id}/restore', [DrinkController::class, 'restore'])->name('beverages.restore');
+Route::delete('/beverages/{id}/force-delete', [DrinkController::class, 'forceDelete'])->name('beverages.forceDelete');
 
  // Users Routes
  Route::get('users', [UserController::class, 'index'])->name('users');

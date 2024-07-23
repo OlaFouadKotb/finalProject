@@ -26,7 +26,7 @@ class HomeController extends Controller
 
      {
          $title='wave Cafee ';
-         return view('frontPages.homesite2',compact('title'));
+         return view('homesite2',compact('title'));
      }
      
     public function drink()

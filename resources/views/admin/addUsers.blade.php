@@ -45,16 +45,18 @@
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="full_name">Full Name <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input type="text" id="full_name" name="full_name" required="required" class="form-control">
-                                
-                                        <span class="text-danger"></span>
-                                   
+                                    @error('full_name')
+                                 <div class="alert alert-danger">{{ $message }}</div>
+                                   @enderror
                                 </div>
                             </div>
                             <div class="item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="user_name">Username <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input type="text" id="user_name" name="user_name" required="required" class="form-control">
-                                  
+                                    @error('user_name')
+                                 <div class="alert alert-danger">{{ $message }}</div>
+                                   @enderror
                                         <span class="text-danger"></span>
                                  
                                 </div>
@@ -63,7 +65,9 @@
                                 <label for="email" class="col-form-label col-md-3 col-sm-3 label-align">Email <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input id="email" name="email" class="form-control" type="email" required="required">
-                                    
+                                    @error('email')
+                                 <div class="alert alert-danger">{{ $message }}</div>
+                                   @enderror
                                         <span class="text-danger"></span>
                                 
                                 </div>
@@ -82,9 +86,9 @@
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="password">Password <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input type="password" id="password" name="password" required="required" class="form-control">
-                                    @if ($errors->has('password'))
-                                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                                    @endif
+                                    @error('password')
+                                 <div class="alert alert-danger">{{ $message }}</div>
+                                   @enderror
                                 </div>
                             </div>
                             <div class="item form-group">

@@ -113,6 +113,7 @@
                                         <option value="Hot Coffee" {{ old('category') == 'Hot Coffee' ? 'selected' : '' }}>Hot Coffee</option>
                                         <option value="Cold Coffee" {{ old('category') == 'Cold Coffee' ? 'selected' : '' }}>Cold Coffee</option>
                                         <option value="Fruit Juice" {{ old('category') == 'Fruit Juice' ? 'selected' : '' }}>Fruit Juice</option>
+                                        <option value="special item" {{ old('category') == 'special Items' ? 'selected' : '' }}>Special Items</option>
                                     </select>
                                     @error('category')
                                         <span class="text-danger">{{ $message }}</span>

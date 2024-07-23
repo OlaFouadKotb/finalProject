@@ -13,10 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Fetch all users from the database
         $users = User::all();
-
-        // Pass the users to the view
         return view('admin.users', compact('users'));
     }
 
@@ -33,25 +30,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the input
-        $validated = $request->validate([
+        $messages = $this->errMsg();
+
+        $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'user_name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:6|confirmed',
             'active' => 'sometimes|boolean'
-        ]);
+        ], $messages);
 
-        // Create a new user
-        $user = new User();
-        $user->full_name = $validated['full_name'];
-        $user->user_name = $validated['user_name'];
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
-        $user->active = $request->has('active');
-        $user->save();
+        $data['password'] = Hash::make($data['password']);
+        User::create($data);
 
-        // Redirect to users list with success message
         return redirect()->route('users')->with('success', 'User added successfully');
     }
 
@@ -69,8 +60,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-  
-        return view('admin.editUser',compact('user'));
+        return view('admin.editUser', compact('user'));
     }
 
     /**
@@ -82,11 +72,10 @@ class UserController extends Controller
             'full_name' => 'required|string|max:255',
             'user_name' => 'required|string|max:255|unique:users,user_name,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => 'nullable|string|min:6|confirmed',
             'active' => 'nullable|boolean',
         ]);
 
-        // Update user data
         $user->full_name = $validatedData['full_name'];
         $user->user_name = $validatedData['user_name'];
         $user->email = $validatedData['email'];
@@ -98,42 +87,35 @@ class UserController extends Controller
 
         $user->save();
 
-        // Redirect back to users list with success message
         return redirect()->route('users')->with('success', 'User updated successfully');
     }
-   /**
-     * Display a listing of the trashed categories.
+
+    /**
+     * Display a listing of the trashed users.
      */
     public function trash()
     {
-        // Fetch all trashed users
         $trash = User::onlyTrashed()->get();
         return view('admin.trashUser', compact('trash'));
     }
- 
+
     /**
-     * Restore the specified trashed category.
+     * Restore the specified trashed user.
      */
     public function restore(string $id)
     {
-        // Restore the trashed category
         User::withTrashed()->where('id', $id)->restore();
-       
-        return redirect('users.trash');
+        return redirect()->route('users.trash')->with('success', 'User restored successfully');
     }
-
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
     {
-        // Soft delete the category
         $id = $request->id;
-        User::where('id',$id)->delete();
-        
-        // Redirect with success message
-        return redirect('users');
+        User::where('id', $id)->delete();
+        return redirect()->route('users')->with('success', 'User deleted successfully');
     }
 
     /**
@@ -141,9 +123,26 @@ class UserController extends Controller
      */
     public function forceDelete(Request $request)
     {
-        // Permanently delete the trashed category
         $id = $request->id;
         User::withTrashed()->where('id', $id)->forceDelete();
-        return redirect('users.trash');
+        return redirect()->route('users.trash')->with('success', 'User permanently deleted');
+    }
+
+    /**
+     * Get validation error messages.
+     */
+    public function errMsg()
+    {
+        return [
+            'full_name.required' => 'The full name is required',
+            'user_name.required' => 'The username is required',
+            'user_name.unique' => 'The username has already been taken',
+            'email.required' => 'The email is required',
+            'email.email' => 'The email must be a valid email address',
+            'email.unique' => 'The email has already been taken',
+            'password.required' => 'The password is required',
+            'password.confirmed' => 'The password confirmation does not match',
+            'password.min' => 'The password must be at least 6 characters long',
+        ];
     }
 }

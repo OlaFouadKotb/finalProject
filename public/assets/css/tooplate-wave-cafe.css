@@ -358,4 +358,15 @@ h2 { margin-top: 0; }
 
     .tm-drinks-nav > ul > li { margin-bottom: 10px; }
     .tm-drinks-nav > ul > li > a { display: block; }
+    .tm-tab-content {
+        display: none;
+    }
+    
+    .tm-tab-content.active {
+        display: block;
+    }
+    
+    .tm-tab-link.active {
+        color: #ffcc00; /* أو أي لون ترغب به لتمييز علامة التبويب النشطة */
+    }
 }

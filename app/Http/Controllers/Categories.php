@@ -109,31 +109,32 @@ class Categories extends Controller
      * Remove the specified resource from storage.
      */
    
-     public function destroy($id)
+     public function destroy(Category $category)
      {
-         try {
-             $category = Category::findOrFail($id);
-             $category->delete();
-             return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
-         } catch (\Exception $e) {
-             if ($e->getMessage() === 'Cannot delete category that contains beverages.') {
-                 return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-             }
- 
-             // يمكنك التعامل مع استثناءات أخرى هنا إذا لزم الأمر
-             return redirect()->back()->withErrors(['error' => 'An error occurred while deleting the category.']);
+         // Check if the category has any associated beverages
+         if ($category->beverages()->count() > 0) {
+             return redirect()->route('categories.index')->with('error', 'Cannot delete category with associated beverages.');
          }
+ 
+         // Delete the category
+         $category->delete();
+ 
+         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
      }
-    /**
-     * Permanently delete the specified trashed category.
-     */
-    public function forceDelete(Request $request)
-    {
-        // Permanently delete the trashed category
-        $id = $request->id;
-        Category::withTrashed()->where('id', $id)->forceDelete();
-        return redirect('categories.trash');
-    }
+ 
+     public function forceDelete(Category $category)
+     {
+         // Check if the category has any associated beverages
+         if ($category->beverages()->count() > 0) {
+             return redirect()->route('categories.index')->with('error', 'Cannot permanently delete category with associated beverages.');
+         }
+ 
+         // Permanently delete the category
+         $category->forceDelete();
+ 
+         return redirect()->route('categories.index')->with('success', 'Category permanently deleted.');
+     }
+ 
 
        /**
      * Custom error messages for validation.

@@ -20,10 +20,10 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        $contactData = $request->only('name', 'email', 'message');
+        $Data = $request->only('name', 'email', 'message');
         
         // Send the email
-        Mail::to('your_email@example.com')->send(new ContactFormMail($contactData));
+        Mail::to('your_email@example.com')->send(new ContactFormMail($Data));
 
         // Redirect with success message
         return redirect()->route('contact.form')->with('success', 'Your message has been sent!');

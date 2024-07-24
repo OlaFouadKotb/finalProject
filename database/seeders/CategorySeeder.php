@@ -11,9 +11,10 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-        Category::create([
-            'name' => 'hot coffee',]);
+        Category::create(['name' => 'Iced Coffee']);
+        Category::create(['name' => 'Hot Coffee']);
+        Category::create(['name' => 'Juice']);
     }
 }

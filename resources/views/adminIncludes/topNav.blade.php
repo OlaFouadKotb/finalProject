@@ -1,4 +1,3 @@
-
 <div class="top_nav">
     <div class="nav_menu">
         <div class="nav toggle">
@@ -9,17 +8,17 @@
                 <!-- User Profile -->
                 <li class="nav-item dropdown open">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                        <img src="{{asset('adminAssets/images/img.jpg')}}" alt="">
-                      
+                        <img src="{{ asset('adminAssets/images/img.jpg') }}" alt="Profile Image" />
+                        {{ Auth::user()->full_name }} <!-- Display the user's full name here -->
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="javascript:;"> Profile</a>
+                        <a class="dropdown-item" href="{{ route('profile') }}">Profile</a> <!-- Assuming you have a route named 'profile' -->
                         <a class="dropdown-item" href="javascript:;">
                             <span class="badge bg-red pull-right">50%</span>
                             <span>Settings</span>
                         </a>
                         <a class="dropdown-item" href="javascript:;">Help</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                        <a class="dropdown-item" href="{{ route('logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                     </div>
                 </li>
 
@@ -27,13 +26,13 @@
                 <li role="presentation" class="nav-item dropdown open">
                     <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-envelope-o"></i>
-                        <span class="badge bg-green">{{ App\Models\Message::where('is_read', false)->count() }}</span>
+                        <span class="badge bg-green">{{ App\Models\Message::where('readable', false)->count() }}</span>
                     </a>
                     <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                        @foreach(App\Models\Message::where('is_read', false)->take(5)->get() as $message)
+                        @foreach(App\Models\Message::where('readable', false)->take(5)->get() as $message)
                             <li class="nav-item">
                                 <a class="dropdown-item">
-                                    <span class="image"><img src="{{asset('adminAssets/images/img.jpg')}}" alt="Profile Image" /></span>
+                                    <span class="image"><img src="{{ asset('adminAssets/images/img.jpg') }}" alt="Profile Image" /></span>
                                     <span>
                                         <span>{{ $message->full_name }}</span>
                                         <span class="time">{{ $message->created_at->diffForHumans() }}</span>

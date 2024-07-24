@@ -27,7 +27,7 @@ class MessagesController extends Controller
         $message = Message::findOrFail($id);
         
         // Mark the message as read
-        $message->update(['is_read' => true]);
+        $message->update(['readable' => true]);
 
         // Pass the message data to the view
         return view('admin.showMessages', compact('message'));
@@ -38,8 +38,9 @@ class MessagesController extends Controller
         $message->delete();
         return redirect()->route('messages.index')->with('success', 'Message deleted successfully');
     }
-    public function getUnreadCount()
+    public function countUnread()
 {
-    return Message::where('is_read', false)->count();
+    $unreadCount = Message::where('readable', false)->count();
+    return response()->json(['count' => $unreadCount]);
 }
 }

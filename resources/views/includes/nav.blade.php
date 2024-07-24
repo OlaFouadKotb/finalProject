@@ -1,7 +1,7 @@
 <nav class="tm-site-nav">
             <ul class="tm-site-nav-ul">
               <li class="tm-page-nav-item">
-                <a href="{{route('drink')}}" class="tm-page-link ">
+                <a href="{{route('drinks.index')}}" class="tm-page-link ">
                   <i class="fas fa-mug-hot tm-page-link-icon"></i>
                   <span>Drink Menu</span>
                 </a>

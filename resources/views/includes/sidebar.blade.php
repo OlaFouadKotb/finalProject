@@ -7,7 +7,7 @@
         <nav class="tm-site-nav">
             <ul class="tm-site-nav-ul">
                 <li class="tm-page-nav-item">
-                    <a href="{{route('drinks')}}" class="tm-page-link active">
+                    <a href="{{route('drinks.index')}}" class="tm-page-link active">
                         <i class="fas fa-mug-hot tm-page-link-icon"></i>
                         <span>Drink Menu</span>
                     </a>
@@ -19,13 +19,13 @@
                     </a>
                 </li>
                 <li class="tm-page-nav-item">
-                    <a href="{{route('special')}}" class="tm-page-link">
+                    <a href="{{route('products.special')}}" class="tm-page-link">
                         <i class="fas fa-glass-martini tm-page-link-icon"></i>
                         <span>Special Items</span>
                     </a>
                 </li>
                 <li class="tm-page-nav-item">
-                    <a href="{{route('contact')}}" class="tm-page-link">
+                    <a href="{{route('contact.form')}}" class="tm-page-link">
                         <i class="fas fa-comments tm-page-link-icon"></i>
                         <span>Contact</span>
                     </a>

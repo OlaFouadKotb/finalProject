@@ -1,10 +1,10 @@
-<?php
-
+<?
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -16,7 +16,7 @@ class UserController extends Controller
         $users = User::all();
         return view('admin.users', compact('users'));
     }
-
+   
     /**
      * Show the form for creating a new resource.
      */
@@ -31,19 +31,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $messages = $this->errMsg();
-
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'user_name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'active' => 'sometimes|boolean'
+            'active' => 'nullable|boolean',
+            'role' => 'required|string', // Ensure role is required
         ], $messages);
 
-        $data['password'] = Hash::make($data['password']);
-        User::create($data);
+        // Create the user
+        User::create([
+            'full_name' => $data['full_name'],
+            'user_name' => $data['user_name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'active' => isset($data['active']) ? 1 : 0,
+            'role' => $data['role'],
+        ]);
 
-        return redirect()->route('users')->with('success', 'User added successfully');
+        return redirect()->route('users')->with('success', 'User added successfully.');
     }
 
     /**
@@ -66,28 +73,39 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'user_name' => 'required|string|max:255|unique:users,user_name,' . $user->id,
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6|confirmed',
-            'active' => 'nullable|boolean',
-        ]);
-
-        $user->full_name = $validatedData['full_name'];
-        $user->user_name = $validatedData['user_name'];
-        $user->email = $validatedData['email'];
-        $user->active = $request->has('active');
-
+        $user = User::findOrFail($id);
+ 
+        // Validate the request
+        $this->validator($request->all(), $user->id)->validate();
+ 
+        // Update user data
+        $user->full_name = $request->full_name;
+        $user->user_name = $request->user_name;
+        $user->email = $request->email;
+ 
+        // Update password if provided
         if ($request->filled('password')) {
-            $user->password = Hash::make($validatedData['password']);
+            $user->password = Hash::make($request->password);
         }
-
+ 
+        // Update active status
+        $user->active = $request->has('active') ? 1 : 0;
+ 
         $user->save();
-
-        return redirect()->route('users')->with('success', 'User updated successfully');
+ 
+        return redirect()->route('users')->with('success', 'User updated successfully.');
+    }
+ 
+    protected function validator(array $data, $userId)
+    {
+        return Validator::make($data, [
+            'full_name' => ['required', 'string', 'max:255'],
+            'user_name' => ['required', 'string', 'max:255', 'unique:users,user_name,' . $userId],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
     }
 
     /**
@@ -143,6 +161,7 @@ class UserController extends Controller
             'password.required' => 'The password is required',
             'password.confirmed' => 'The password confirmation does not match',
             'password.min' => 'The password must be at least 6 characters long',
+            'role.required' => 'The role is required',
         ];
     }
 }

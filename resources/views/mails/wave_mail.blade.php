@@ -5,8 +5,9 @@
 </head>
 <body>
     <h1>Contact Form Message</h1>
-    <p><strong>Name:</strong> {{  $contactData['name'] }}</p>
-    <p><strong>Email:</strong> {{  $contactData['email'] }}</p>
-    <p><strong>Message:</strong> {{  $contactData['message'] }}</p>
+    <p><strong>Name:</strong> {{  $Data['name'] }}</p>
+    <p><strong>Email:</strong> {{  $Data['email'] }}</p>
+    <p><strong>Message:</strong> {{  $Data['message'] }}</p>
+    
 </body>
 </html>

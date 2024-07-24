@@ -65,7 +65,7 @@
                                             @foreach($categories as $category)
                                             <tr>
                                                 <td>{{ $category->name }}</td>
-                                                <td><a href="{{ route('editcategory', $category->id) }}"><img src="{{ asset('assets/images/edit.png') }}" alt="Edit"></a></td>
+                                                <td><a href="{{ route('editcategory', $category->id) }}"><img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit"></a></td>
                                                 <td>
                                                     <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
                                                         @csrf

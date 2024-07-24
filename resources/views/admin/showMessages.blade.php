@@ -32,7 +32,7 @@
                     <div class="x_content">
                         <div class="form-group">
                             <label class="col-form-label"><strong>Full Name:</strong></label>
-                            <p>{{ $message->full_name }}</p>
+                            <p>{{ $message->name }}</p>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label"><strong>Email:</strong></label>
@@ -42,6 +42,10 @@
                             <label class="col-form-label"><strong>Message Content:</strong></label>
                             <p>{{ $message->message }}</p>
                         </div>
+                        <div class="form-group">
+                        <label for="readable">Published</label>
+                        <p>{{ $message->readable ? 'Yes' : 'No' }}</p>
+                    </div>
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <a href="{{ route('messages.index') }}" class="btn btn-primary">Back to List</a>

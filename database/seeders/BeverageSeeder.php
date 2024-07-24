@@ -18,8 +18,26 @@ class BeverageSeeder extends Seeder
             'price' => 10.25,
             'published'=>'1',
            'special'=>'0',
-            'image' => 'assets/image/iced-americano.png',
+            'image' => 'assets/img/iced-americano.png',
             'category'=>'Iced Coffee'
+        ]);
+        Beverage::create([
+            'title' => 'cappicciono',
+            'content'=>'coffee with milk ',
+            'price' => 10.25,
+            'published'=>'1',
+           'special'=>'0',
+            'image' => 'assets/img/hot-cappuccino.png',
+            'category'=>'hot Coffee'
+        ]);
+        Beverage::create([
+            'title' => 'smoothie1',
+            'content'=>' ',
+            'price' => 11.25,
+            'published'=>'1',
+           'special'=>'0',
+            'image' => 'assets/img/smoothie-3.png',
+            'category'=>'juice'
         ]);
     }
 }

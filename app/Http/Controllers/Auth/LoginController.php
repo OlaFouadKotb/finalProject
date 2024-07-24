@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,28 +44,30 @@ class LoginController extends Controller
      */
     public function credentials(Request $request)
     {
-        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            return ['email' => $request->email, 'password' => $request->password];
-        } else {
-            return ['userName' => $request->email, 'password' => $request->password];
-        }
-    }
-    protected function authenticated(Request $request, $user)
-    {
-        // Store user profile information in session
-        session([
-            'profile_image' => $user->profile_image,
-            'user_name' => $user->name, // تأكد من استخدام الاسم الصحيح هنا
+        $credentials = $request->validate([
+            'user_name' => ['required'],
+            'password' => ['required'],
         ]);
+ 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+ 
+            return redirect()->intended('users');
+        }
+ 
+        return back()->withErrors([
+            'user_name' => 'The provided credentials do not match our records.',
+        ])->onlyInput('user_name');
+    
     }
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-
+     
         $request->session()->invalidate();
-
+     
         $request->session()->regenerateToken();
-
+     
         return redirect('/');
     }
 

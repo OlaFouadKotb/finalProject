@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
@@ -44,6 +45,8 @@ class RegisterController extends Controller
             'user_name' => $data['user_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => User::ROLE_USER,
+            'active' => isset($data['active']) ? 1 : 0, // Set active status
         ]);
     }
 
@@ -51,22 +54,21 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $user = $this->create($request->all());
-
-        event(new Registered($user));
+        event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        // Send verification email
+        $user->sendEmailVerificationNotification();
+
+        // Redirect to a specific route after registration
+        return redirect()->route('verification.notice');
     }
 
-    
     protected function authenticated(Request $request, $user)
     {
         // Set session variables
-        Session::put('userName', $user->userName);
-        Session::put('name', $user->name);
+        Session::put('userName', $user->user_name);
+        Session::put('name', $user->full_name);
+    }
 }
-}
-

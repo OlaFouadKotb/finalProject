@@ -13,17 +13,18 @@ class ContactFormMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $contactData;
+    public $Data;
     /**
      * Create a new message instance.
      */
-    public function __construct($contactData)
+    public function __construct($Data)
     {
-        $this->contactData = $contactData;
+        $this->Data =$Data;
     }
     public function build()
     {
-        return $this->view('mails.wave_mail')
-                    ->with('contactData', $this->contactData);
+        return $this->subject('New Contact Form Submission')
+        ->view('mails.wave_mail');
+         // ->with('Data', $this->Data);
     }
 }

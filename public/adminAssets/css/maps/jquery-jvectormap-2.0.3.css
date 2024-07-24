@@ -133,3 +133,24 @@ svg {
     line-height: 20px;
     padding-left: 3px;
 }
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-img img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-info span {
+    font-weight: bold;
+}

@@ -27,6 +27,9 @@
       <div class="col-md-12 col-sm-12">
         <div class="x_panel">
           <div class="x_title">
+            <div style="text-align: right;">
+              
+            </div>
             <h2>List of Messages</h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -50,8 +53,10 @@
                   <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                       <tr>
-                        <th>Full Name</th>
+                        <th>Name</th>
                         <th>Email</th>
+                        <th>Message</th>
+                        <th>Status</th>
                         <th>Show</th>
                         <th>Delete</th>
                       </tr>
@@ -59,9 +64,18 @@
                     <tbody>
                       @foreach($messages as $message)
                         <tr>
-                          <td>{{ $message->full_name }}</td>
+                          <td>{{ $message->name }}</td> <!-- Corrected from full_name to name -->
                           <td>{{ $message->email }}</td>
-                          <td><a href="{{ route('messages.show', $message->id) }}"><img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit" title="Edit"></a></td>
+                          <td>{{ $message->message }}</td>
+                          <td>
+                            <!-- {{ $message->readable ? 'yes' : 'no' }} Display status based on whether the message is read or unread -->
+                            
+                          </td>
+                          <td>
+                            <a href="{{ route('messages.show', $message->id) }}">
+                              <img src="{{ asset('adminAssets/images/edit.png') }}" alt="Edit" title="Edit">
+                            </a>
+                          </td>
                           <td>
                             <form action="{{ route('messages.destroy', $message->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this message?');">
                               @csrf

@@ -15,15 +15,19 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->decimal('price');
+            $table->decimal('price', 8, 2); // Specify precision and scale for price
             $table->boolean('published')->default(false);
             $table->boolean('special')->default(false);
             $table->string('image')->nullable();
-            $table->string('category');
-            $table->unsignedBigInteger('category_id'); 
+            $table->unsignedBigInteger('category_id'); // Foreign key to categories table
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
+            // Foreign key constraint
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories')
+                  ->onDelete('cascade');
         });
     }
 

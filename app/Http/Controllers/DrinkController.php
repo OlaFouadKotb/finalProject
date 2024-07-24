@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\UploadFile;
+
 use Illuminate\Http\Request;
 use App\Models\Beverage;
 use App\Models\Category;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DrinkController extends Controller
 {
-    use UploadFile;
+   
 
     private $columns = [
         'title',
@@ -46,7 +46,7 @@ class DrinkController extends Controller
      */
     public function specialItems()
     {
-        $specialProducts = Beverage::where('special', true)->get();
+        $specialProducts= Beverage::where('special', true)->get();
         return view('frontPages.special', compact('specialProducts'));
     }
 
@@ -67,18 +67,16 @@ class DrinkController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'price' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'published' => 'nullable|boolean',
             'special' => 'nullable|boolean',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ]);
-
-        // Upload image using Trait
-        $fileName = $this->uploadFile($request->image, 'assets/images');
-        $data['image'] = $fileName;
-
+    
+        $data['image'] = $request->image->store('beverages', 'public');
+    
         Beverage::create($data);
-
+    
         return redirect()->route('beverages.index')->with('success', 'Beverage created successfully.');
     }
 
@@ -105,30 +103,31 @@ class DrinkController extends Controller
      */
     public function update(Request $request, Beverage $beverage)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'price' => 'required|numeric',
-            'published' => 'nullable|boolean',
-            'special' => 'nullable|boolean',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|exists:categories,id',
-        ]);
+       
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'price' => 'required|numeric',
+        'published' => 'nullable|boolean',
+        'special' => 'nullable|boolean',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'required|exists:categories,id',
+    ]);
 
-        if ($request->hasFile('image')) {
-            // Delete old image if it exists
-            if ($beverage->image) {
-                Storage::disk('public')->delete($beverage->image);
-            }
-
-            // Store new image
-            $data['image'] = $this->uploadFile($request->image, 'assets/images');
+    if ($request->hasFile('image')) {
+        // Delete old image if it exists
+        if ($beverage->image) {
+            Storage::disk('public')->delete($beverage->image);
         }
 
-        $beverage->update($data);
-
-        return redirect()->route('beverages.index')->with('success', 'Beverage updated successfully.');
+        // Store new image
+        $data['image'] = $request->image->store('beverages', 'public');
     }
+
+    $beverage->update($data);
+
+    return redirect()->route('beverages.index')->with('success', 'Beverage updated successfully.');
+}
 
     /**
      * Remove the specified beverage from storage.

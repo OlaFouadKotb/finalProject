@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Beverage;
 
 class HomeController extends Controller
 {
@@ -25,8 +27,8 @@ class HomeController extends Controller
      public function index()
 
      {
-         $title='wave Cafee ';
-         return view('homesite2',compact('title'));
+        $categories = Category::orderBy('created_at', 'desc')->take(3)->with('beverages')->get();
+        return view('frontPages.home', compact('categories'));
      }
      
     public function drink()

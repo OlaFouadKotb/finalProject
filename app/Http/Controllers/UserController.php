@@ -1,4 +1,3 @@
-<?
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,7 +15,7 @@ class UserController extends Controller
         $users = User::all();
         return view('admin.users', compact('users'));
     }
-   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -37,7 +36,6 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'active' => 'nullable|boolean',
-            'role' => 'required|string', // Ensure role is required
         ], $messages);
 
         // Create the user
@@ -47,10 +45,9 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'active' => isset($data['active']) ? 1 : 0,
-            'role' => $data['role'],
         ]);
 
-        return redirect()->route('users')->with('success', 'User added successfully.');
+        return redirect()->route('users.index')->with('success', 'User added successfully.');
     }
 
     /**
@@ -64,7 +61,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('admin.editUser', compact('user'));
@@ -76,36 +73,20 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
- 
+
         // Validate the request
         $this->validator($request->all(), $user->id)->validate();
- 
+
         // Update user data
-        $user->full_name = $request->full_name;
-        $user->user_name = $request->user_name;
-        $user->email = $request->email;
- 
-        // Update password if provided
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
- 
-        // Update active status
-        $user->active = $request->has('active') ? 1 : 0;
- 
-        $user->save();
- 
-        return redirect()->route('users')->with('success', 'User updated successfully.');
-    }
- 
-    protected function validator(array $data, $userId)
-    {
-        return Validator::make($data, [
-            'full_name' => ['required', 'string', 'max:255'],
-            'user_name' => ['required', 'string', 'max:255', 'unique:users,user_name,' . $userId],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        $user->update([
+            'full_name' => $request->full_name,
+            'user_name' => $request->user_name,
+            'email' => $request->email,
+            'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            'active' => $request->has('active') ? 1 : 0,
         ]);
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     /**
@@ -120,7 +101,7 @@ class UserController extends Controller
     /**
      * Restore the specified trashed user.
      */
-    public function restore(string $id)
+    public function restore($id)
     {
         User::withTrashed()->where('id', $id)->restore();
         return redirect()->route('users.trash')->with('success', 'User restored successfully');
@@ -129,19 +110,17 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id)
     {
-        $id = $request->id;
         User::where('id', $id)->delete();
-        return redirect()->route('users')->with('success', 'User deleted successfully');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
 
     /**
      * Permanently delete the specified trashed user.
      */
-    public function forceDelete(Request $request)
+    public function forceDelete(Request $request, $id)
     {
-        $id = $request->id;
         User::withTrashed()->where('id', $id)->forceDelete();
         return redirect()->route('users.trash')->with('success', 'User permanently deleted');
     }
@@ -161,7 +140,20 @@ class UserController extends Controller
             'password.required' => 'The password is required',
             'password.confirmed' => 'The password confirmation does not match',
             'password.min' => 'The password must be at least 6 characters long',
-            'role.required' => 'The role is required',
         ];
+    }
+
+    /**
+     * Custom validator.
+     */
+    protected function validator(array $data, $userId)
+    {
+        return Validator::make($data, [
+            'full_name' => ['required', 'string', 'max:255'],
+            'user_name' => ['required', 'string', 'max:255', 'unique:users,user_name,' . $userId],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
+            'active' => ['sometimes'],
+        ]);
     }
 }

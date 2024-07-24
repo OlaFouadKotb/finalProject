@@ -73,16 +73,7 @@
                                 <label for="password-confirm">{{ __('Confirm Password') }}</label>
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
-                            <div class="item form-group">
-    <label class="col-form-label col-md-3 col-sm-3 label-align">Active</label>
-    <div class="col-md-6 col-sm-6">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="active" {{ old('active') ? 'checked' : '' }} class="flat">
-            </label>
-        </div>
-    </div>
-</div>
+                           
 
                             <button type="submit" class="btn btn-primary">
                                 {{ __('Register') }}

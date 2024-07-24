@@ -45,6 +45,8 @@ class RegisterController extends Controller
             'user_name' => $data['user_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'active' => false, // تعيين قيمة active افتراضيًا إلى false
+            
            
         ]);
     }

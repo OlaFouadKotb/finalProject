@@ -28,7 +28,7 @@ class HomeController extends Controller
 
      {
         $categories = Category::orderBy('created_at', 'desc')->take(3)->with('beverages')->get();
-        return view('frontPages.home', compact('categories'));
+        return view('homesite2', compact('categories'));
      }
      
     public function drink()
@@ -53,6 +53,7 @@ class HomeController extends Controller
 
     {
         $title='wave Cafee - Special Items';
-        return view('frontPages.special',compact('title'));
+        $specialProducts = Beverage::where('special', true)->get();
+        return view('frontPages.special', compact('title', 'specialProducts'));
     }
 }

@@ -17,47 +17,23 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'full_name',
-        'user_name',
-        'email',
-        'password',
-       
-       
+        'full_name', 'user_name', 'email', 'password', 'active', 'role',
     ];
-    // const ROLE_ADMIN = 'admin';
-    // const ROLE_USER = 'user';
 
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
-  
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-     /**
-     * Determine if the user is an admin.
-     *
-     * @return bool
-     */
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_USER = 'user';
+
     public function isAdmin()
     {
         return $this->is_admin;
     }
 }
-
